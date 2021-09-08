@@ -25,7 +25,8 @@ yum --installroot=/diskless-root -y install \
     ethtool \
     pciutils \
     usbutils \
-    vim
+    vim \
+    NetworkManager
 
 # Go to our target root directory
 cd /diskless-root
@@ -52,4 +53,4 @@ chroot . \
 find | cpio -ocv | pigz -9 > /output/diskless.cpio.gz
 
 # Copy the kernel image
-cp boot/vmlinuz-3.10.0-1160.41.1.el7.x86_64 /output/
+cp boot/vmlinuz-3.10.0-1160.42.2.el7.x86_64 /output/
