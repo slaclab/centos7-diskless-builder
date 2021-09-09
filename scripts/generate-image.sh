@@ -38,6 +38,10 @@ cp /custom_files/slac.sh etc/profile.d/
 ln -s ./sbin/init ./init
 echo NETWORKING=yes > etc/sysconfig/network
 
+# For afs
+mkdir -p afs/slac.stanford.edu
+echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
+
 # chroot and set the root password to "root", and create the laci account
 chroot . \
     bash -c '\
