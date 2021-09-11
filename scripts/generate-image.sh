@@ -42,11 +42,15 @@ echo NETWORKING=yes > etc/sysconfig/network
 mkdir -p afs/slac.stanford.edu
 echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
 
-# chroot and set the root password to "root", and create the laci account
+# Allow laci to access without password and blocks root ssh login
+sed -i "s/#PermitEmptyPasswords no/PermitEmptyPasswords yes/" etc/ssh/sshd_config
+sed -i "s/#PermitRootLogin yes/PermitRootLogin no/" etc/ssh/sshd_config
+
+# chroot, set a blank password to root, and create the laci account
 chroot . \
     bash -c '\
         pwconv && \
-        echo "root:root" | chpasswd && \
+        passwd -d root && \
         useradd -d /home/laci -m laci && \
         usermod -aG laci laci && \
         passwd -d laci && \
