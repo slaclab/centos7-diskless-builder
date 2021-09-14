@@ -37,6 +37,7 @@ cp /custom_files/slac.sh etc/profile.d/
 # Set some important configuration
 ln -s ./sbin/init ./init
 echo NETWORKING=yes > etc/sysconfig/network
+#echo /afs/slac.stanford.edu/g/lcls/epics/iocCommon/cpu-b084-sp16/startup.cmd > etc/bootfile
 
 # For afs
 mkdir -p afs/slac.stanford.edu
@@ -46,13 +47,19 @@ echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,so
 sed -i "s/#PermitEmptyPasswords no/PermitEmptyPasswords yes/" etc/ssh/sshd_config
 sed -i "s/#PermitRootLogin yes/PermitRootLogin no/" etc/ssh/sshd_config
 
-# chroot, set a blank password to root, and create the laci account
+# chroot, set a blank password to root, and create the laci account. laci
+# account must have UID 8412 and be part of an lcls group with GID 2211.
+# The IDs are important for accessing NFS directories.
 chroot . \
     bash -c '\
         pwconv && \
         passwd -d root && \
-        useradd -d /home/laci -m laci && \
-        usermod -aG laci laci && \
+        groupadd lcls && \
+        groupmod -g 2211 lcls && \
+        useradd -g lcls -d /home/laci -m laci && \
+        usermod -u 8412 laci && \
+#        usermod -aG lcls laci && \
+#        usermod -aG pci laci && \
         passwd -d laci && \
         exit \
     '
