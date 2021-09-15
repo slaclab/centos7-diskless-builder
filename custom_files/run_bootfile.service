@@ -1,9 +1,10 @@
 [Unit]
 Description = Run standart SLAC boot file
-After = remote-fs.target
+RequiresMountsFor=/afs/slac.stanford.edu
 
 [Service]
+Type=simple
 ExecStart = /root/scripts/run_bootfile.sh
 
 [Install]
-WantedBy = multi-user.target
+WantedBy = default.target
