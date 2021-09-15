@@ -2,6 +2,7 @@
 set HOSTNAME=hostname
 STARTUP_DIR=/afs/slac.stanford.edu/g/lcls/epics/iocCommon/$HOSTNAME
 
+# Wait at most 1 minute to see if AFS is mounted
 for i in {1..60}
 do
   if [ ! -d "$STARTUP_DIR" ]; then
