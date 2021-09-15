@@ -38,7 +38,9 @@ cd /diskless-root
 cp /custom_files/slac.sh etc/profile.d/
 mkdir root/scripts
 cp /custom_files/run_bootfile.sh root/scripts
-cp /custom_files/run_bootfile.service root/scripts
+cp /custom_files/run_bootfile.service usr/lib/systemd/system
+cp /custom_files/epics.conf etc/security/limits.d
+cp /custom_files/90-nproc.conf etc/security/limits.d
 
 # Set some important configuration
 ln -s ./sbin/init ./init
@@ -66,7 +68,7 @@ chroot . \
         useradd -g lcls -d /home/laci -m laci && \
         usermod -u 8412 laci && \
         passwd -d laci && \
-        systemctl enable /root/scripts/run_bootfile.service && \
+        systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
         exit \
     '
 
