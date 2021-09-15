@@ -26,13 +26,19 @@ yum --installroot=/diskless-root -y install \
     pciutils \
     usbutils \
     vim \
-    NetworkManager
+    NetworkManager \
+    screen \
+    ipmitool \
+    gcc
 
 # Go to our target root directory
 cd /diskless-root
 
 # Add SLAC custom files
 cp /custom_files/slac.sh etc/profile.d/
+mkdir root/scripts
+cp /custom_files/run_bootfile.sh root/scripts
+cp /custom_files/run_bootfile.service root/scripts
 
 # Set some important configuration
 ln -s ./sbin/init ./init
@@ -41,7 +47,8 @@ echo NETWORKING=yes > etc/sysconfig/network
 
 # For afs
 mkdir -p afs/slac.stanford.edu
-echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
+#echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
+echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=10,timeo=14 0 0" > etc/fstab
 
 # Allow laci to access without password and blocks root ssh login
 sed -i "s/#PermitEmptyPasswords no/PermitEmptyPasswords yes/" etc/ssh/sshd_config
@@ -58,9 +65,8 @@ chroot . \
         groupmod -g 2211 lcls && \
         useradd -g lcls -d /home/laci -m laci && \
         usermod -u 8412 laci && \
-#        usermod -aG lcls laci && \
-#        usermod -aG pci laci && \
         passwd -d laci && \
+        systemctl enable /root/scripts/run_bootfile.service && \
         exit \
     '
 

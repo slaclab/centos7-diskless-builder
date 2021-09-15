@@ -1,0 +1,9 @@
+[Unit]
+Description = Run standart SLAC boot file
+After = remote-fs.target
+
+[Service]
+ExecStart = /root/scripts/run_bootfile.sh
+
+[Install]
+WantedBy = multi-user.target
