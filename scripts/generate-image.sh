@@ -1,16 +1,29 @@
 #!/usr/bin/env bash
 
-# Get the centos-release RPM
-yumdownloader centos-release
+# Verify if Docker volume was created. If not, exit script.
+if [ ! -d "/centos7-builder" ]; then
+  echo "centos7-builder Docker volume not found. Configure the container with this volume."
+  exit 2
+fi
 
-# Prepare target root directory
-mkdir /diskless-root
+# Create diskless-root directory inside the Docker volume, if needed
+if [ ! -d "/centos7-builder/diskless-root" ]; then
+  mkdir /centos7-builder/diskless-root
+fi
+
+cd /centos7-builder
+
+# Download centos-release, if needed
+if [ ! -f "centos-release-7-9.2009.1.el7.centos.x86_64.rpm" ]; then
+  # Get the centos-release RPM
+  yumdownloader centos-release
+fi
 
 # centos-release contains things like the yum configs, and is necessary to bootstrap the system
-rpm --root=/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
+rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
 
 # Install packages in our target root directory
-yum --installroot=/diskless-root -y install \
+yum --installroot=/centos7-builder/diskless-root -y install \
     basesystem \
     filesystem \
     bash \
@@ -29,26 +42,34 @@ yum --installroot=/diskless-root -y install \
     NetworkManager \
     screen \
     ipmitool \
-    gcc
+    gcc \
+    rtkit
 
 # Go to our target root directory
-cd /diskless-root
+cd diskless-root
 
-# Add SLAC custom files
-cp /custom_files/slac.sh etc/profile.d/
-mkdir root/scripts
-cp /custom_files/run_bootfile.sh root/scripts
-cp /custom_files/run_bootfile.service usr/lib/systemd/system
-cp /custom_files/epics.conf etc/security/limits.d
-cp /custom_files/90-nproc.conf etc/security/limits.d
+# Add SLAC custom files and force copy, even if it exists
+cp -r /custom_files/slac.sh etc/profile.d/
+if [ ! -d "root/scripts" ]; then
+  mkdir root/scripts
+fi
+cp -r /custom_files/run_bootfile.sh root/scripts
+cp -r /custom_files/create-users.sh root/scripts
+cp -r /custom_files/run_bootfile.service usr/lib/systemd/system
+cp -r /custom_files/epics.conf etc/security/limits.d
+cp -r /custom_files/90-nproc.conf etc/security/limits.d
 
-# Set some important configuration
-ln -s ./sbin/init ./init
+# Set some important configiuration
+if [ ! -e "init" ]; then
+  ln -s ./sbin/init ./init
+fi
 echo NETWORKING=yes > etc/sysconfig/network
 #echo /afs/slac.stanford.edu/g/lcls/epics/iocCommon/cpu-b084-sp16/startup.cmd > etc/bootfile
 
-# For afs
-mkdir -p afs/slac.stanford.edu
+# For AFS
+if [ ! -d "afs/slac.stanford.edu" ]; then
+  mkdir -p afs/slac.stanford.edu
+fi
 #echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
 echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=10,timeo=14 0 0" > etc/fstab
 
@@ -61,13 +82,7 @@ sed -i "s/#PermitRootLogin yes/PermitRootLogin no/" etc/ssh/sshd_config
 # The IDs are important for accessing NFS directories.
 chroot . \
     bash -c '\
-        pwconv && \
-        passwd -d root && \
-        groupadd lcls && \
-        groupmod -g 2211 lcls && \
-        useradd -g lcls -d /home/laci -m laci && \
-        usermod -u 8412 laci && \
-        passwd -d laci && \
+        /root/scripts/create-users.sh && \
         systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
         exit \
     '
