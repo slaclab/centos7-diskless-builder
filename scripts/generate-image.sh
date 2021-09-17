@@ -42,8 +42,7 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     NetworkManager \
     screen \
     ipmitool \
-    gcc \
-    rtkit
+    gcc
 
 # Go to our target root directory
 cd diskless-root
@@ -76,6 +75,12 @@ echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-sy
 # Allow laci to access without password and blocks root ssh login
 sed -i "s/#PermitEmptyPasswords no/PermitEmptyPasswords yes/" etc/ssh/sshd_config
 sed -i "s/#PermitRootLogin yes/PermitRootLogin no/" etc/ssh/sshd_config
+
+# Increasing limit priorities for EPICS IOCs to set SCHED_FIFO properly
+sed -i "s/#DefaultLimitMEMLOCK=/DefaultLimitMEMLOCK=infinity/g" etc/systemd/system.conf
+sed -i "s/#DefaultLimitRTPRIO=/DefaultLimitRTPRIO=infinity/g" etc/systemd/system.conf
+sed -i "s/#DefaultLimitMEMLOCK=/DefaultLimitMEMLOCK=infinity/g" etc/systemd/user.conf
+sed -i "s/#DefaultLimitRTPRIO=/DefaultLimitRTPRIO=infinity/g" etc/systemd/user.conf
 
 # chroot, set a blank password to root, and create the laci account. laci
 # account must have UID 8412 and be part of an lcls group with GID 2211.
