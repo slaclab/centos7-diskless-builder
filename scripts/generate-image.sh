@@ -92,8 +92,9 @@ chroot . \
         exit \
     '
 
-# Generate the cpio image
-find | cpio -ocv | pigz -9 > /output/diskless.cpio.gz
+# Generate the cpio image. Compress with -1 equals to fastest and less compression.
+# This helps with the speed of generating the image and also uncompressing during the PXE boot.
+find | cpio -ocv | pigz -1 > /output/diskless.cpio.gz
 
 # Copy the kernel image
 cp boot/vmlinuz-3.10.0-1160.42.2.el7.x86_64 /output/
