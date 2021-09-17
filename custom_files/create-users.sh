@@ -10,7 +10,7 @@ fi
 # Create user laci, if needed
 egrep -i "laci" /etc/passwd;
 if [ ! $? -eq 0 ]; then
-  useradd -g lcls -d /home/laci -m laci
+  useradd -g lcls --shel /bin/sh -d /home/laci -m laci
   usermod -u 8412 laci
   passwd -d laci
 fi
