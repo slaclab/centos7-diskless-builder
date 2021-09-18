@@ -1,0 +1,10 @@
+[Unit]
+Description = Run standard SLAC boot file
+RequiresMountsFor=/usr/local
+
+[Service]
+Type=simple
+ExecStart = /root/scripts/run_bootfile_prod.sh
+
+[Install]
+WantedBy = default.target
