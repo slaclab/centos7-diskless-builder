@@ -33,7 +33,7 @@ if [ $(hostname) = "localhost" ]; then
 fi
 
 if [ -d "$STARTUP_DIR" ] && [ $(hostname) != "localhost" ]; then
-    /afs/slac.stanford.edu/g/lcls/epics/iocCommon/$(hostname)/startup.cmd
+    $STARTUP_DIR/$(hostname)/startup.cmd
 else
     echo "startup.cmd file not found. Check if AFS was successfully mounted."
 fi

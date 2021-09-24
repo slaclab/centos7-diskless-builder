@@ -1,6 +1,6 @@
 [Unit]
 Description = Run standard SLAC boot file
-RequiresMountsFor=/usr/local
+After=network-online.target
 
 [Service]
 Type=simple
