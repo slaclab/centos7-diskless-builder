@@ -1,6 +1,6 @@
 [Unit]
 Description = Run standard SLAC boot file
-RequiresMountsFor=/afs/slac.stanford.edu
+After=network-online.target
 
 [Service]
 Type=simple

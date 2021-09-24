@@ -126,8 +126,9 @@ if [ -n "$prod_flag" ]; then
 else
   if [ ! -d "afs/slac.stanford.edu" ]; then
     mkdir -p afs/slac.stanford.edu
-    #echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs ro,nolock,noac,soft 0 0" > etc/fstab
-    echo "afsnfs:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=10,timeo=14 0 0" > etc/fstab
+  fi
+  if [ -d "afs/slac.stanford.edu" ]; then
+    echo "172.23.66.102:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
   fi
 fi
 
@@ -150,12 +151,17 @@ chroot . \
         systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
         exit \
     '
-echo "skip-output_flag"
-echo $skip_output_flag
+
 if [ -z "$skip_output_flag" ]; then
+  if [ -n "$prod_flag" ]; then
+    fs_filename="COLD7_prod_fs.cpio.gz";
+  else
+    fs_filename="COLD7_dev_fs.cpio.gz";
+  fi
+
   # Generate the cpio image. Compress with -1 equals to fastest and less compression.
   # This helps with the speed of generating the image and also uncompressing during the PXE boot.
-  find | cpio -ocv | pigz -1 > /output/diskless.cpio.gz
+  find | cpio -ocv | pigz -1 > /output/$fs_filename
 
   # Copy the kernel image
   cp boot/vmlinuz-3.10.0-1160.42.2.el7.x86_64 /output/
