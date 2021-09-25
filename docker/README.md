@@ -2,7 +2,7 @@
 
 ## Description
 
-This directory contains the Dockerfile used to generate a CentOS 7 docker image, which we will used as a *host* to build out root image.
+This directory contains the Dockerfile used to generate a CentOS 7 docker image, which we will use as a *host* to build out root image.
 
 ## Build the Docker image
 
@@ -20,4 +20,4 @@ After building the docker image, you can run the container with this command:
 docker run -ti --rm centos7-builder
 ```
 
-You normally will need to mount a local directory inside the container in order to write the generated images, so you will need use the `--mount` argument as well.
+You will normally need to mount a local directory inside the container in order to write the generated images, so you will need use the `--mount` argument as well.

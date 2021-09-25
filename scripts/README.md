@@ -2,7 +2,7 @@
 
 ## Description
 
-This directory contains scripts that are use to generate the diskless CentOS 7 image.
+This directory contains scripts that are used to generate the diskless CentOS 7 image.
 
 ## Script Description
 
