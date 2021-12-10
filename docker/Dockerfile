@@ -6,4 +6,5 @@ RUN yum -y update && \
         wget \
         yumdownloader \
         pigz \
+	openssh-server \
     && yum clean all -y

@@ -152,11 +152,17 @@ chroot . \
         exit \
     '
 
+# Generate ssh keys to avoid generating new ones every time the diskless
+# system boots, creating annoying RSA key mismatch error messages when
+# an user wants to connect.
+/usr/bin/ssh-keygen -A
+cp -f /etc/ssh/*key* etc/ssh
+
 if [ -z "$skip_output_flag" ]; then
   if [ -n "$prod_flag" ]; then
-    fs_filename="COLD7_prod_fs.cpio.gz";
+    fs_filename="CentOs7_Lite_prod_fs.cpio.gz";
   else
-    fs_filename="COLD7_dev_fs.cpio.gz";
+    fs_filename="CentOs7_Lite_dev_fs.cpio.gz";
   fi
 
   # Generate the cpio image. Compress with -1 equals to fastest and less compression.
@@ -164,5 +170,5 @@ if [ -z "$skip_output_flag" ]; then
   find | cpio -ocv | pigz -1 > /output/$fs_filename
 
   # Copy the kernel image
-  cp boot/vmlinuz-3.10.0-1160.42.2.el7.x86_64 /output/
+  cp boot/vmlinuz-* /output/
 fi
