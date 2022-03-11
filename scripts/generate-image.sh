@@ -87,7 +87,9 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     NetworkManager \
     screen \
     ipmitool \
-    gcc
+    gdb \
+    gdb-gdbserver \
+    tcpdump
 
 # Go to our target root directory
 cd diskless-root
