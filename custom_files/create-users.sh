@@ -14,6 +14,13 @@ if [ ! $? -eq 0 ]; then
   groupmod -g 2376 facet
 fi
 
+# Create group acctest, if needed
+egrep -i "acctest" /etc/group;
+if [ ! $? -eq 0 ]; then
+  groupadd acctest
+  groupmod -g 2549 acctest
+fi
+
 # Create user laci, if needed
 egrep -i "laci" /etc/passwd;
 if [ ! $? -eq 0 ]; then
@@ -28,4 +35,12 @@ if [ ! $? -eq 0 ]; then
   useradd -g facet --shel /bin/sh -d /home/flaci -m flaci
   usermod -u 11121 flaci
   passwd -d flaci
+fi
+
+# Create user acctf, if needed
+egrep -i "acctf" /etc/passwd;
+if [ ! $? -eq 0 ]; then
+  useradd -g acctest --shel /bin/sh -d /home/acctf -m acctf
+  usermod -u 11846 acctf
+  passwd -d acctf
 fi
