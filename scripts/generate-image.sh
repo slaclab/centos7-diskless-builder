@@ -89,7 +89,8 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     ipmitool \
     gdb \
     gdb-gdbserver \
-    tcpdump
+    tcpdump \
+    ntp
 
 # Go to our target root directory
 cd diskless-root
@@ -110,7 +111,7 @@ fi
 cp -r /custom_files/epics.conf etc/security/limits.d
 cp -r /custom_files/90-nproc.conf etc/security/limits.d
 
-# Set some important configiuration
+# Set some important configuration
 if [ ! -e "init" ]; then
   ln -s ./sbin/init ./init
 fi
@@ -147,10 +148,12 @@ sed -i "s/#DefaultLimitRTPRIO=/DefaultLimitRTPRIO=infinity/g" etc/systemd/user.c
 # chroot, set a blank password to root, and create the laci account. laci
 # account must have UID 8412 and be part of an lcls group with GID 2211.
 # The IDs are important for accessing NFS directories.
+# Activate NTP.
 chroot . \
     bash -c '\
         /root/scripts/create-users.sh && \
         systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
+	systemctl enable ntpd && \
         exit \
     '
 
