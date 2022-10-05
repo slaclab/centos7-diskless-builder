@@ -90,7 +90,8 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     gdb \
     gdb-gdbserver \
     tcpdump \
-    ntp
+    ntp \
+    yum-cron 
 
 # Go to our target root directory
 cd diskless-root
