@@ -21,6 +21,9 @@ show_usage() {
 prod_flag=
 skip_output_flag=
 
+# Get the version of the CentOS-7 diskless builder used for this
+read -r version < VERSION
+
 while [ -n "$1" ]; do
     case "$1" in
         -h | --help)
@@ -167,9 +170,9 @@ cp -f /etc/ssh/*key* etc/ssh
 
 if [ -z "$skip_output_flag" ]; then
   if [ -n "$prod_flag" ]; then
-    fs_filename="CentOs7_Lite_prod_fs.cpio.gz";
+    fs_filename="CentOs7_Lite_prod_${version}_fs.cpio.gz";
   else
-    fs_filename="CentOs7_Lite_dev_fs.cpio.gz";
+    fs_filename="CentOs7_Lite_dev_${version}_fs.cpio.gz";
   fi
 
   # Generate the cpio image. Compress with -1 equals to fastest and less compression.

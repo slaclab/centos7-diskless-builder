@@ -9,5 +9,6 @@ docker container run -ti --rm \
     --mount src=centos7-builder,target=/centos7-builder,type=volume \
     --mount src=${PWD}/scripts,target=/scripts,type=bind \
     --mount src=${PWD}/custom_files,target=/custom_files,type=bind \
+    --mount src=${PWD}/VERSION,target=/VERSION,type=bind \
     centos7-builder \
     /scripts/generate-image.sh $@
