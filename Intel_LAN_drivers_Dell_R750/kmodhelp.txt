@@ -1,0 +1,92 @@
+KMOD RPM Install for Intel(R) Network Connections
+=================================================
+June 7, 2021
+
+
+Contents
+========
+
+- Overview
+- Install Using KMOD RPM
+
+
+Overview
+========
+The KMOD RPM Package Manager (RPM) is a precompiled binary for Red Hat* 
+Enterprise Linux* (RHEL), using Red Hat's KMOD RPM format specification.
+
+The KMOD RPMs update existing RPMs currently installed on the system. These 
+updates are provided by Red Hat in the RHEL release.
+
+One KMOD RPM file is available for each supported version of RHEL. You must 
+match the KMOD RPM to the version of RHEL on the target system.
+
+NOTE: If the RHEL operating system does not display the correct branding strings,
+download the latest pci.ids file from https://pci-ids.ucw.cz/ to the
+/usr/share/hwdata/ directory.
+
+
+Install Using KMOD RPM
+======================
+KMOD RPMs are provided for supported Linux* distributions. The naming 
+convention for the included RPMs is:
+
+  kmod-<driver name>-<driver version>-<rpm rel>.<arch type>.rpm
+
+For example, kmod-ixgbe-5.9.4-201130.x86_64.rpm:
+
+  - ixgbe is the driver name;
+  - 5.9.4 is the version;
+  - 201130 is the RPM release version;
+  - x86_64 is the architecture type.
+
+Do the following to install the KMOD RPM. NOTE: You must be logged in as root 
+to install the driver.
+
+1. Download the KMOD RPM file to your system.
+
+2. Install the KMOD RPM using the rpm command: 
+
+  # rpm -i <rpm filename>
+
+  For example:
+
+  # rpm -i kmod-ixgbe-5.9.4-201130.x86_64.rpm 
+
+3. Check the status of the new installed driver. For example:
+
+  # modinfo ixgbe
+
+4. Make the newly installed driver active in the running kernel. You can 
+do this by rebooting the system or using the rmmod or modprobe commands. 
+For example: 
+
+  # shutdown -r now 
+
+	or 
+
+  # rmmod ixgbe; sleep 1; modprobe ixgbe
+
+
+
+Legal / Disclaimers
+===================
+
+Copyright (C) 2017 - 2021, Intel Corporation
+
+This software and the related documents are Intel copyrighted materials, and 
+your use of them is governed by the express license under which they were 
+provided to you ("License"). Unless the License provides otherwise, you may 
+not use, modify, copy, publish, distribute, disclose or transmit this software 
+or the related documents without Intel's prior written permission.
+
+This software and the related documents are provided as is, with no express or 
+implied warranties, other than those that are expressly stated in the License.
+
+Intel, the Intel logo, and other Intel marks are trademarks of Intel 
+Corporation or its subsidiaries. Other names and brands may be claimed as the 
+property of others. 
+
+
+
+

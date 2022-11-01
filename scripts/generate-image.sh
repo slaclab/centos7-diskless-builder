@@ -70,6 +70,14 @@ fi
 # centos-release contains things like the yum configs, and is necessary to bootstrap the system
 rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
 
+# Add Intel network card drivers for Dell R750 servers
+RPMs="./Intel_LAN_drivers_Dell_R750/*.rpm"
+for f in $RPMs
+do
+  echo "Installing $f package...";
+  rpm --root=/centos7-builder/diskless-root -ivh --nodeps $f;
+done
+
 # Install packages in our target root directory
 yum --installroot=/centos7-builder/diskless-root -y install \
     basesystem \
@@ -91,6 +99,7 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     screen \
     ipmitool \
     gdb \
+
     gdb-gdbserver \
     tcpdump \
     ntp \
