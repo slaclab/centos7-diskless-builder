@@ -102,6 +102,7 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     gdb-gdbserver \
     tcpdump \
     ntp \
+	sudo \
     yum-cron \
     cronie 
 
