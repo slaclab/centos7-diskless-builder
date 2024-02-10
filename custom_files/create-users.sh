@@ -1,4 +1,7 @@
+# Create a password for the root user
 passwd -d root
+echo Creating password for user root.
+sed -i s/^root:[^:]*:/root:'$5$cUbknFhsjO1AdUNM$SQPkWyiRotZc2FHPJf3Syyc30i0Egtyc7NVWhPnI.h6':/1 etc/shadow
 
 # Create group lcls, if needed
 egrep -i "lcls" /etc/group;
@@ -18,7 +21,14 @@ fi
 egrep -i "acctest" /etc/group;
 if [ ! $? -eq 0 ]; then
   groupadd acctest
-  groupmod -g 2549 acctest
+  groupmod -g 2459 acctest
+fi
+
+# Create group qb, if needed
+egrep -i "qb" /etc/group;
+if [ ! $? -eq 0 ]; then
+  groupadd qb
+  groupmod -g 1080 qb
 fi
 
 # Create user laci, if needed
@@ -44,3 +54,16 @@ if [ ! $? -eq 0 ]; then
   usermod -u 11846 acctf
   passwd -d acctf
 fi
+
+# Create user spear, if needed
+egrep -i "spear" /etc/passwd;
+if [ ! $? -eq 0 ]; then
+  useradd -g qb --shel /bin/sh -d /home/spear -m spear
+  usermod -u 7753 spear
+  passwd -d spear
+fi
+
+# Create sudoers file
+echo Creating sudoers file.
+chmod 0440 etc/sudoers
+chown root:root etc/sudoers

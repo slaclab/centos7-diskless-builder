@@ -99,7 +99,6 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     screen \
     ipmitool \
     gdb \
-
     gdb-gdbserver \
     tcpdump \
     ntp \
@@ -112,7 +111,7 @@ cd diskless-root
 # Add SLAC custom files and force copy, even if it exists
 cp -r /custom_files/slac.sh etc/profile.d/
 if [ ! -d "root/scripts" ]; then
-  mkdir root/scripts
+  mkdir -p root/scripts
 fi
 cp -r /custom_files/run_bootfile_dev.sh root/scripts
 cp -r /custom_files/run_bootfile_prod.sh root/scripts
@@ -124,6 +123,8 @@ else
 fi
 cp -r /custom_files/epics.conf etc/security/limits.d
 cp -r /custom_files/90-nproc.conf etc/security/limits.d
+cp -r /custom_files/SLAC_properties etc/SLAC_properties
+cp -r /custom_files/sudoers etc/sudoers
 
 # Set some important configuration
 if [ ! -e "init" ]; then
