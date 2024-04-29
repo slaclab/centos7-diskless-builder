@@ -126,6 +126,7 @@ cp -r /custom_files/epics.conf etc/security/limits.d
 cp -r /custom_files/90-nproc.conf etc/security/limits.d
 cp -r /custom_files/SLAC_properties etc/SLAC_properties
 cp -r /custom_files/sudoers etc/sudoers
+cp -f /custom_files/sshd_config etc/ssh/sshd_config
 
 # Set some important configuration
 if [ ! -e "init" ]; then
