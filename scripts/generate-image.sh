@@ -126,6 +126,7 @@ cp -r /custom_files/epics.conf etc/security/limits.d
 cp -r /custom_files/90-nproc.conf etc/security/limits.d
 cp -r /custom_files/SLAC_properties etc/SLAC_properties
 cp -r /custom_files/sudoers etc/sudoers
+cp -f /custom_files/sshd_config etc/ssh/sshd_config
 
 # Set some important configuration
 if [ ! -e "init" ]; then
@@ -161,17 +162,23 @@ sed -i "s/#DefaultLimitRTPRIO=/DefaultLimitRTPRIO=infinity/g" etc/systemd/system
 sed -i "s/#DefaultLimitMEMLOCK=/DefaultLimitMEMLOCK=infinity/g" etc/systemd/user.conf
 sed -i "s/#DefaultLimitRTPRIO=/DefaultLimitRTPRIO=infinity/g" etc/systemd/user.conf
 
+
 # chroot, set a blank password to root, and create the laci account. laci
 # account must have UID 8412 and be part of an lcls group with GID 2211.
 # The IDs are important for accessing NFS directories.
-# Activate NTP.
+# Activate NTP, generate required locales
 chroot . \
     bash -c '\
         /root/scripts/create-users.sh && \
         systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
 	systemctl enable ntpd && \
+	localedef -i en_US -f UTF-8 en_US.utf8 && \
         exit \
     '
+
+# Set the default locale. This matches the default on our DEV machines.
+echo "LANG=en_US.utf8" > etc/locale.conf
+
 
 # Generate ssh keys to avoid generating new ones every time the diskless
 # system boots, creating annoying RSA key mismatch error messages when
