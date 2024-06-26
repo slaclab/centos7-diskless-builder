@@ -1,10 +1,11 @@
-FROM centos:7
+FROM rockylinux:9
 
 # Install packages we will need in our 'builder' OS
 RUN yum -y update && \
     yum install -y \
         wget \
-        yumdownloader \
+        yum-utils\
         pigz \
-	openssh-server \
-    && yum clean all -y
+        cpio \
+        openssh-server \
+        && yum clean all -y

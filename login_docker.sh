@@ -1,1 +1,1 @@
-docker run --rm --mount src=centos7-builder,target=/centos7-builder,type=volume -it centos7-builder bash
+docker run --rm --mount src=rl9-builder,target=/rl9-builder,type=volume -it rl9-builder bash

@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-docker image build -t centos7-builder .
+set -ex
+
+docker image build -t rl9-builder .
