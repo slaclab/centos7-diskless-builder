@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 show_usage() {
     echo "Usage: $0 [--prod] [-h/--help] [-s/--skip-output]"
     echo "Builds the CentOS image inside Docker and outputs"
@@ -49,37 +51,26 @@ done
 
 
 # Verify if Docker volume was created. If not, exit script.
-if [ ! -d "/centos7-builder" ]; then
-  echo "centos7-builder Docker volume not found. Configure the container with this volume."
+if [ ! -d "/rl9-builder" ]; then
+  echo "rl9-builder Docker volume not found. Configure the container with this volume."
   exit 2
 fi
 
 # Create diskless-root directory inside the Docker volume, if needed
-if [ ! -d "/centos7-builder/diskless-root" ]; then
-  mkdir /centos7-builder/diskless-root
+if [ ! -d "/rl9-builder/diskless-root" ]; then
+  mkdir /rl9-builder/diskless-root
 fi
 
-cd /centos7-builder
+cd /rl9-builder
 
-# Download centos-release, if needed
-if [ ! -f "centos-release-7-9.2009.1.el7.centos.x86_64.rpm" ]; then
-  # Get the centos-release RPM
-  yumdownloader centos-release
-fi
+# Get the centos-release RPM
+yumdownloader rocky-release
 
-# centos-release contains things like the yum configs, and is necessary to bootstrap the system
-rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
-
-# Add Intel network card drivers for Dell R750 servers
-RPMs="./Intel_LAN_drivers_Dell_R750/*.rpm"
-for f in $RPMs
-do
-  echo "Installing $f package...";
-  rpm --root=/centos7-builder/diskless-root -ivh --nodeps $f;
-done
+# rocky-release contains things like the yum configs, and is necessary to bootstrap the system
+yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release-9*.rpm
 
 # Install packages in our target root directory
-yum --installroot=/centos7-builder/diskless-root -y install \
+yum --installroot=/rl9-builder/diskless-root -y install \
     basesystem \
     filesystem \
     bash \
@@ -88,7 +79,7 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     openssh-server \
     openssh-clients \
     nfs-utils \
-    dhcp \
+    dhcp-client \
     dhclient \
     net-tools \
     ethtool \
@@ -96,15 +87,14 @@ yum --installroot=/centos7-builder/diskless-root -y install \
     usbutils \
     vim \
     NetworkManager \
-    screen \
+    tmux \
     ipmitool \
     gdb \
     gdb-gdbserver \
     tcpdump \
-    ntp \
+    chrony \
 	sudo \
-    yum-cron \
-    cronie 
+    cronie
 
 # Go to our target root directory
 cd diskless-root
