@@ -179,5 +179,5 @@ if [ -z "$skip_output_flag" ]; then
   find | cpio -ocv | pigz -1 > /output/$fs_filename
 
   # Copy the kernel image
-  cp boot/vmlinuz-* /output/
+  wget -O /output/vmlinuz https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz
 fi
