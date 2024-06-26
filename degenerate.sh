@@ -4,5 +4,5 @@
 
 rm -rf output
 mkdir output
-docker volume rm centos7-builder
-docker image rm centos7-builder
+docker volume rm rl9-builder
+docker image rm rl9-builder

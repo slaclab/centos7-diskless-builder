@@ -4,10 +4,10 @@ set -x
 
 show_usage() {
     echo "Usage: $0 [--prod] [-h/--help] [-s/--skip-output]"
-    echo "Builds the CentOS image inside Docker and outputs"
+    echo "Builds the Rocky image inside Docker and outputs"
     echo "the result to the binded output directory."
     echo ""
-    echo "Installs the CentOs rootfs, installs packages in the created rootfs, creates"
+    echo "Installs the Rocky rootfs, installs packages in the created rootfs, creates"
     echo "user groups and accounts, copy files from the external world to the rootfs,"
     echo "configure services, and export images."
     echo "If --prod is not passed as argument, the image will be built for Dev environment."
@@ -23,7 +23,7 @@ show_usage() {
 prod_flag=
 skip_output_flag=
 
-# Get the version of the CentOS-7 diskless builder used for this
+# Get the version of the Rocky diskless builder used for this
 read -r version < VERSION
 
 while [ -n "$1" ]; do
@@ -63,10 +63,8 @@ fi
 
 cd /rl9-builder
 
-# Get the centos-release RPM
-yumdownloader rocky-release
-
 # rocky-release contains things like the yum configs, and is necessary to bootstrap the system
+yumdownloader rocky-release
 yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release-9*.rpm
 
 # Install packages in our target root directory
@@ -126,7 +124,7 @@ echo NETWORKING=yes > etc/sysconfig/network
 # For AFS in dev and NFS in prod
 if [ -n "$prod_flag" ]; then
   # Delete usr/local/ contents as prod uses it as mounting point
-  # and CentOs 7 has it only with empty directories.
+  # and Rocky has only empty directories under /usr/local.
   rm -rf usr/local/*
   if [ -d "afs/slac.stanford.edu" ]; then
     rm -rf afs
@@ -171,9 +169,9 @@ cp -f /etc/ssh/*key* etc/ssh
 
 if [ -z "$skip_output_flag" ]; then
   if [ -n "$prod_flag" ]; then
-    fs_filename="CentOs7_Lite_prod_${version}_fs.cpio.gz";
+    fs_filename="Rocky9_Lite_prod_${version}_fs.cpio.gz";
   else
-    fs_filename="CentOs7_Lite_dev_${version}_fs.cpio.gz";
+    fs_filename="Rocky9_Lite_dev_${version}_fs.cpio.gz";
   fi
 
   # Generate the cpio image. Compress with -1 equals to fastest and less compression.

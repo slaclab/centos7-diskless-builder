@@ -1,8 +1,8 @@
-# CentOS 7 Builder Docker Image
+# Rocky 9 Builder Docker Image
 
 ## Description
 
-This directory contains the Dockerfile used to generate a CentOS 7 docker image, which we will use as a *host* to build out root image.
+This directory contains the Dockerfile used to generate a Rocky 9 docker image, which we will use as a *host* to build out root image.
 
 ## Build the Docker image
 
