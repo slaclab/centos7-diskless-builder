@@ -181,5 +181,7 @@ if [ -z "$skip_output_flag" ]; then
   find | cpio -ocv | pigz -1 > /output/$fs_filename
 
   # Copy the kernel image
-  wget -O /output/vmlinuz https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+  kvers="`basename /rl9-builder/diskless-root/lib/modules/*`"
+  cp /rl9-builder/diskless-root/lib/modules/$kvers/vmlinuz /rl9-builder/diskless-root/boot/vmlinuz-$kvers
+  cp  /rl9-builder/diskless-root/lib/modules/$kvers/vmlinuz /output/vmlinuz-$kvers
 fi
