@@ -92,7 +92,9 @@ yum --installroot=/rl9-builder/diskless-root -y install \
     tcpdump \
     chrony \
 	sudo \
-    cronie
+    cronie \
+    hostname \
+    less
 
 # Go to our target root directory
 cd diskless-root

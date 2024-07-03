@@ -8,4 +8,5 @@ RUN yum -y update && \
         pigz \
         cpio \
         openssh-server \
+        less \
         && yum clean all -y
