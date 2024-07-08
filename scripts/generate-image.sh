@@ -64,8 +64,7 @@ fi
 cd /rl9-builder
 
 # rocky-release contains things like the yum configs, and is necessary to bootstrap the system
-yumdownloader rocky-release
-yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release-9*.rpm
+yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release
 
 # Install packages in our target root directory
 yum --installroot=/rl9-builder/diskless-root -y install \
