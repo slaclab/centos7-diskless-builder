@@ -166,7 +166,7 @@ chroot . \
     bash -c '\
         /root/scripts/create-users.sh && \
         systemctl enable /usr/lib/systemd/system/run_bootfile.service && \
-	systemctl enable ntpd && \
+	systemctl enable chronyd && \
         exit \
     '
 
