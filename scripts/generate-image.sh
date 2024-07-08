@@ -96,6 +96,14 @@ yum --installroot=/rl9-builder/diskless-root -y install \
     hostname \
     less
 
+# hack alert! Install screen on host to work around a bug:
+#   gpg key read from /etc/pki/... but rpm WILL NOT APPEND "installroot" to path
+yum -y install epel-release
+yum -y install screen
+# for the screen cli utility only
+yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install epel-release
+yum --installroot=/rl9-builder/diskless-root  -y install screen
+
 # Go to our target root directory
 cd diskless-root
 
