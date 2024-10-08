@@ -70,6 +70,11 @@ fi
 # centos-release contains things like the yum configs, and is necessary to bootstrap the system
 rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
 
+# Switch to Stanford mirrors now that mirror.centos.org is offline
+sed -i s,mirror.centos.org,mirror.stanford.edu,g /centos7-builder/diskless-root/etc/yum.repos.d/CentOS-*.repo
+sed -i s,^#.*baseurl=http,baseurl=http,g /centos7-builder/diskless-root/etc/yum.repos.d/CentOS-*.repo
+sed -i s,^mirrorlist=http,#mirrorlist=http,g /centos7-builder/diskless-root/etc/yum.repos.d/CentOS-*.repo
+
 # Add Intel network card drivers for Dell R750 servers
 RPMs="./Intel_LAN_drivers_Dell_R750/*.rpm"
 for f in $RPMs
