@@ -64,7 +64,7 @@ cd /centos7-builder
 # Download centos-release, if needed
 if [ ! -f "centos-release-7-9.2009.1.el7.centos.x86_64.rpm" ]; then
   # Get the centos-release RPM
-  yumdownloader centos-release
+  yumdownloader centos-release-7-9.2009.1.el7.centos
 fi
 
 # centos-release contains things like the yum configs, and is necessary to bootstrap the system
