@@ -30,3 +30,21 @@ cat /centos7-builder/diskless-root/etc/group
 ```
 
 Each directory in this repository has a README.md file that you can check to learn more about its contents.
+
+## Testing with QEMU
+
+A simple run-qemu.sh script is provided to test the image locally in QEMU. 
+
+`qemu-system-x86_64` must be available in your PATH for this to work. On Debian or Ubuntu, `qemu-system-x86_64` can be installed with `sudo apt install qemu-system`.
+
+
+To boot the image in QEMU:
+```sh
+./run-qemu.sh
+```
+
+The script bridges host port 8022 to guest port 22, so you can SSH in with the following command:
+```
+ssh -p 8022 laci@localhost
+```
+
