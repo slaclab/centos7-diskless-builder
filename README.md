@@ -1,5 +1,7 @@
 # CentOS 7 Lite for diskless systems
 
+[DOE Code](https://www.osti.gov/doecode/biblio/75992)
+
 ## Description
 
 This repository contains the code used to generate CentOS 7 diskless images, which can be boot using IPXE.
