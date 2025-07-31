@@ -62,14 +62,15 @@ fi
 cd /centos7-builder
 
 # Download centos-release, if needed
-if [ ! -f "centos-release-7-9.2009.1.el7.centos.x86_64.rpm" ]; then
+if [ ! -f "centos-release-7-9.2009.0.el7.centos.x86_64.rpm" ]; then
   # Get the centos-release RPM
-  yumdownloader centos-release-7-9.2009.1.el7.centos
+  #yumdownloader centos-release-7-9.2009.1.el7.centos
+  wget ftp.cs.stanford.edu/centos/centos/7/os/x86_64/Packages/centos-release-7-9.2009.0.el7.centos.x86_64.rpm
 fi
 
 # centos-release contains things like the yum configs, and is necessary to bootstrap the system
-rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.1.el7.centos.x86_64.rpm
-
+rpm --root=/centos7-builder/diskless-root -ivh --nodeps centos-release-7-9.2009.0.el7.centos.x86_64.rpm
+ls /centos7-builder/diskless-root #/etc/yum.repos.d/
 # Switch to Stanford mirrors now that mirror.centos.org is offline
 sed -i s,mirror.centos.org,mirror.stanford.edu,g /centos7-builder/diskless-root/etc/yum.repos.d/CentOS-*.repo
 sed -i s,^#.*baseurl=http,baseurl=http,g /centos7-builder/diskless-root/etc/yum.repos.d/CentOS-*.repo
@@ -154,7 +155,8 @@ else
     mkdir -p afs/slac.stanford.edu
   fi
   if [ -d "afs/slac.stanford.edu" ]; then
-    echo "172.23.66.102:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
+#    echo "172.23.66.102:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
+    echo "s3dflclsdevnfs001:/sdf/group/ad/transition/afs/slac.stanford.edu:/afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
   fi
 fi
 
