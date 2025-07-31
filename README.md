@@ -14,7 +14,7 @@ You need to run this script in a host with the docker engine installed in it.
 
 In order to generate the CentOS 7 diskless images, you just need to run the [generate.sh](generate.sh) script. The resulting files will be located in the [output](output) directory. generate.sh can be run using optional parameters:
 
-If --prod is not passed as argument, the image will be built for production environment. Otherwise, it will build for dev environment.
+If --prod is passed as argument, the image will be built for production environment. Otherwise, it will build for dev environment.
 
 Optional arguments:
   -h, --help                  Show this help message and exit
