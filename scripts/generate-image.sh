@@ -144,7 +144,8 @@ else
     mkdir -p afs/slac.stanford.edu
   fi
   if [ -d "afs/slac.stanford.edu" ]; then
-    echo "172.23.66.102:/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
+    # device  mountpoint  fstype  options  dump  pass
+    echo "s3dflclsdevnfs001:/sdf/group/ad/transition/afs/slac.stanford.edu /afs/slac.stanford.edu nfs _netdev,auto,x-systemd.automount,x-systemd.mount-timeout=5min,x-systemd.after=sys-subsystem-net-devices-enp7s0.device,retry=10,timeo=14 0 0" > etc/fstab
   fi
 fi
 
