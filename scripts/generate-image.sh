@@ -63,11 +63,12 @@ fi
 
 cd /rl9-builder
 
-# rocky-release contains things like the yum configs, and is necessary to bootstrap the system
-yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release
+# rocky-release contains things like the dnf configs, and is necessary to bootstrap the system
+dnf --installroot=/rl9-builder/diskless-root --releasever=9 -y install rocky-release
 
 # Install packages in our target root directory
-yum --installroot=/rl9-builder/diskless-root -y install \
+# --setopt=install_weak_deps=False: Cuts image size by more than half
+dnf --installroot=/rl9-builder/diskless-root  --setopt=install_weak_deps=False -y install \
     basesystem \
     filesystem \
     bash \
@@ -97,11 +98,11 @@ yum --installroot=/rl9-builder/diskless-root -y install \
 
 # hack alert! Install screen on host to work around a bug:
 #   gpg key read from /etc/pki/... but rpm WILL NOT APPEND "installroot" to path
-yum -y install epel-release
-yum -y install screen
+dnf -y install epel-release
+dnf -y install screen
 # for the screen cli utility only
-yum --installroot=/rl9-builder/diskless-root --releasever=9 -y install epel-release
-yum --installroot=/rl9-builder/diskless-root  -y install screen
+dnf --installroot=/rl9-builder/diskless-root --releasever=9 -y install epel-release
+dnf --installroot=/rl9-builder/diskless-root  -y install screen
 
 # Go to our target root directory
 cd diskless-root
